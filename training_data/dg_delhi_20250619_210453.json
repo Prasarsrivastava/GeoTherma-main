@@ -1,0 +1,281 @@
+{
+  "name": "dg_delhi",
+  "folder": "dg_delhi",
+  "time": "dg_delhi",
+  "points": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.26894855499269,
+          28.593923579237345
+        ]
+      },
+      "properties": {
+        "class_value": 2,
+        "class_name": "water",
+        "color": "blue",
+        "timestamp": "2025-06-19T15:33:51.440Z",
+        "source": "manual"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.25995779037477,
+          28.59237864196022
+        ]
+      },
+      "properties": {
+        "class_value": 2,
+        "class_name": "water",
+        "color": "blue",
+        "timestamp": "2025-06-19T15:33:52.600Z",
+        "source": "manual"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.26463556289674,
+          28.598237978940002
+        ]
+      },
+      "properties": {
+        "class_value": 2,
+        "class_name": "water",
+        "color": "blue",
+        "timestamp": "2025-06-19T15:33:53.968Z",
+        "source": "manual"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.25120306015016,
+          28.585944299242865
+        ]
+      },
+      "properties": {
+        "class_value": 2,
+        "class_name": "water",
+        "color": "blue",
+        "timestamp": "2025-06-19T15:33:56.968Z",
+        "source": "manual"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.29396820068361,
+          28.572009724494464
+        ]
+      },
+      "properties": {
+        "class_value": 2,
+        "class_name": "water",
+        "color": "blue",
+        "timestamp": "2025-06-19T15:34:03.120Z",
+        "source": "manual"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.28499889373781,
+          28.57623080478367
+        ]
+      },
+      "properties": {
+        "class_value": 1,
+        "class_name": "vegetation",
+        "color": "green",
+        "timestamp": "2025-06-19T15:34:19.024Z",
+        "source": "manual"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.28246152400972,
+          28.576164851706668
+        ]
+      },
+      "properties": {
+        "class_value": 1,
+        "class_name": "vegetation",
+        "color": "green",
+        "timestamp": "2025-06-19T15:34:20.376Z",
+        "source": "manual"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.30202019214632,
+          28.575071908981794
+        ]
+      },
+      "properties": {
+        "class_value": 1,
+        "class_name": "vegetation",
+        "color": "green",
+        "timestamp": "2025-06-19T15:34:27.544Z",
+        "source": "manual"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.30485260486604,
+          28.57655585863045
+        ]
+      },
+      "properties": {
+        "class_value": 1,
+        "class_name": "vegetation",
+        "color": "green",
+        "timestamp": "2025-06-19T15:34:28.880Z",
+        "source": "manual"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.30588793754579,
+          28.576640655120933
+        ]
+      },
+      "properties": {
+        "class_value": 1,
+        "class_name": "vegetation",
+        "color": "green",
+        "timestamp": "2025-06-19T15:34:30.304Z",
+        "source": "manual"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.30378508567811,
+          28.57577855428244
+        ]
+      },
+      "properties": {
+        "class_value": 0,
+        "class_name": "urban",
+        "color": "red",
+        "timestamp": "2025-06-19T15:34:34.296Z",
+        "source": "manual"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.30444490909578,
+          28.575891617090015
+        ]
+      },
+      "properties": {
+        "class_value": 0,
+        "class_name": "urban",
+        "color": "red",
+        "timestamp": "2025-06-19T15:34:35.784Z",
+        "source": "manual"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.2840976715088,
+          28.569390308267614
+        ]
+      },
+      "properties": {
+        "class_value": 0,
+        "class_name": "urban",
+        "color": "red",
+        "timestamp": "2025-06-19T15:34:39.615Z",
+        "source": "manual"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.28120088577272,
+          28.56869304259908
+        ]
+      },
+      "properties": {
+        "class_value": 0,
+        "class_name": "urban",
+        "color": "red",
+        "timestamp": "2025-06-19T15:34:40.175Z",
+        "source": "manual"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.28203773498535,
+          28.56752464112088
+        ]
+      },
+      "properties": {
+        "class_value": 0,
+        "class_name": "urban",
+        "color": "red",
+        "timestamp": "2025-06-19T15:34:40.783Z",
+        "source": "manual"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          77.27212429046632,
+          28.567826165324988
+        ]
+      },
+      "properties": {
+        "class_value": 0,
+        "class_name": "urban",
+        "color": "red",
+        "timestamp": "2025-06-19T15:34:42.511Z",
+        "source": "manual"
+      }
+    }
+  ],
+  "created": "20250619_210453",
+  "version": "1.0"
+}

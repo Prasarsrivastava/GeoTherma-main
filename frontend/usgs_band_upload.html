@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload GeoTIFF Bands</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/3/3e/Urban_heat_island.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            max-width: 600px;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.8);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #f9d342;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 8px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: #f57c00;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #e65100;
+        }
+
+        .spinner {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .spinner img {
+            width: 60px;
+        }
+    </style>
+
+    <script>
+        function showSpinner() {
+            document.getElementById("spinner").style.display = "block";
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Upload GeoTIFF Satellite Bands</h2>
+        <form action="/upload-usgs-bands" method="post" enctype="multipart/form-data" onsubmit="showSpinner()">
+            <label for="place">Place Name:</label>
+            <input type="text" id="place" name="place" required>
+
+            <label for="b2">B2 File:</label>
+            <input type="file" id="b2" name="b2" accept=".tif,.tiff" required>
+
+            <label for="b3">B3 File:</label>
+            <input type="file" id="b3" name="b3" accept=".tif,.tiff" required>
+
+            <label for="b4">B4 File:</label>
+            <input type="file" id="b4" name="b4" accept=".tif,.tiff" required>
+
+            <label for="b5">B5 File:</label>
+            <input type="file" id="b5" name="b5" accept=".tif,.tiff" required>
+
+            <label for="b6">B6 File:</label>
+            <input type="file" id="b6" name="b6" accept=".tif,.tiff" required>
+
+            <label for="b7">B7 File:</label>
+            <input type="file" id="b7" name="b7" accept=".tif,.tiff" required>
+
+            <label for="b10">B10 File:</label>
+            <input type="file" id="b10" name="b10" accept=".tif,.tiff" required>
+
+            <input type="submit" value="Upload & Process">
+        </form>
+
+        <div class="spinner" id="spinner">
+            <p>Processing... please wait</p>
+            <img src="https://i.imgur.com/llF5iyg.gif" alt="Loading spinner">
+        </div>
+    </div>
+</body>
+</html>

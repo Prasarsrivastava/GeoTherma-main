@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+*.egg
+*.pkl
+*.log
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.venv/
+venv/
+ENV/
+
+# Data outputs
+/data/output/
+/data/processed/
+/data/raw/*/backup_*/
+
+# Models
+/models/*.pkl
+
+# Uploads
+/uploads/
+
+# Node
+node_modules/
+
+# Misc
+*.bak
+*.tmp
+
+# Ignore deployment artifacts
+deployement/

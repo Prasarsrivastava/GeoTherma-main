@@ -1,0 +1,14 @@
+flask
+flask-cors
+numpy
+pandas
+geopandas
+rasterio
+scikit-learn
+matplotlib
+seaborn
+shapely
+joblib
+torch
+requests
+pyyaml

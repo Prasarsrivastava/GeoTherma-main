@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Heat Island Analysis Hub</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e1e5ee;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .card-img {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+        .card-content {
+            padding: 1.5rem;
+        }
+        .card h2 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+        .card p {
+            color: #7f8c8d;
+            margin-bottom: 1.5rem;
+        }
+        .btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+        .btn-config {
+            background: #2ecc71;
+        }
+        .btn-config:hover {
+            background: #27ae60;
+        }
+        .btn-dashboard {
+            background: #9b59b6;
+        }
+        .btn-dashboard:hover {
+            background: #8e44ad;
+        }
+        .btn-analysis {
+            background: #e74c3c;
+        }
+        .btn-analysis:hover {
+            background: #c0392b;
+        }
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 2px solid #e1e5ee;
+            color: #7f8c8d;
+        }
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Urban Heat Island Analysis</h1>
+            <p class="subtitle">Comprehensive tools for monitoring and analyzing urban heat islands</p>
+        </header>
+
+        <main class="dashboard">
+           
+            <div class="card">
+                <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');"></div>
+                <div class="card-content">
+                    <h2>Data collection</h2>
+                    <p>Collect satellite imagery </p>
+                    <a href="https://earthexplorer.usgs.gov/" class="btn btn-analysis">Collect satellite imagery Open Source Data Collection</a>
+                    <p>Upload the B2 To B10 band files collected from Earthexplorer.</p>
+                    <a href="usgs_band_upload.html" class="btn btn-analysis">Upload satelite ir band files </a>
+                </div>
+            </div>
+              
+            
+            <div class="card">
+                <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');"></div>
+                <div class="card-content">
+                    <h2>Data Explorer</h2>
+                    <p>Browse and filter collected UHI data with advanced query capabilities.</p>
+                    <a href="vege" class="btn">Data Processing</a>
+                </div>
+            </div>
+
+            
+            <div class="card">
+                <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80');"></div>
+                <div class="card-content">
+                    <h2>Urban heat modeling </h2>
+                    <p>Run models to calculate and predict.</p>
+                    <a href="urban_heat_dashboard.html" class="btn">Urban heat modal run for analysis</a>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Urban Heat Island Analysis Platform &copy; 2025 | Developed for Climate Research</p>
+        </footer>
+    </div>
+    <body>
+ 
+
+</body>
+</html>

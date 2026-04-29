@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Raster Processing Tools</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet -->
+  <script src="https://unpkg.com/georaster"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Leaflet Draw -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+
+  <!-- GeoRaster Support -->
+  <script src="https://unpkg.com/georaster-layer-for-leaflet"></script>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+    }
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+    
+    /* Toolbox containers */
+    .map-toolbox {
+      position: absolute;
+      top: 10pc;
+      right: 1pc;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      padding: 15px;
+      width: 300px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transition: all 0.3s ease;
+    }
+    
+    .toolbox-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .toolbox-title {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    
+    .close-toolbox {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #7f8c8d;
+      font-size: 1.2em;
+    }
+    
+    /* Form elements */
+    select, button, input[type=range] {
+      width: 100%;
+      padding: 8px 12px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    button:hover {
+      background-color: #2980b9;
+    }
+    
+    button.secondary {
+      background-color: #95a5a6;
+    }
+    
+    button.secondary:hover {
+      background-color: #7f8c8d;
+    }
+    
+    button.danger {
+      background-color: #e74c3c;
+    }
+    
+    button.danger:hover {
+      background-color: #c0392b;
+    }
+    
+    label {
+      font-size: 0.9em;
+      font-weight: 500;
+      color: #34495e;
+      display: block;
+      margin-top: 10px;
+    }
+    
+    /* Opacity control on map */
+    .leaflet-control-opacity {
+      
+      right:5pc;
+     
+    }
+    
+    .leaflet-control-opacity label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 0.8em;
+    }
+    
+    /* Tab navigation */
+    .tool-tabs {
+      display: flex;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .tool-tab {
+      padding: 8px 15px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      font-size: 0.9em;
+    }
+    
+    .tool-tab.active {
+      border-bottom: 3px solid #3498db;
+      color: #3498db;
+      font-weight: bold;
+    }
+    
+    /* Training point markers */
+    .training-marker {
+      stroke: white;
+      stroke-width: 1.5;
+    }
+    
+    /* Control buttons */
+    .control-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 15px;
+    }
+    
+    .control-buttons button {
+      flex: 1;
+    }
+    
+    /* Status messages */
+    .status-message {
+      padding: 8px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    
+    .status-success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    
+    .status-error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<!-- Main Toolbox -->
+<div id="main-toolbox" class="map-toolbox" style="display: none;">
+  <div class="toolbox-header">
+    <div class="toolbox-title">Raster Processing Tools</div>
+    <button class="close-toolbox" id="close-main-toolbox"><i class="fas fa-times"></i></button>
+  </div>
+  
+  <div class="tool-tabs">
+    <div class="tool-tab active" data-tool="clip">Clip Tool</div>
+    <div class="tool-tab" data-tool="classification">Classification</div>
+  </div>
+  
+  <!-- Clip Tool Tab -->
+  <div id="clip-tool-content" class="tool-content">
+    <label>Folder:
+      <select id="folderSelect"></select>
+    </label>
+    
+    <label>File:
+      <select id="fileSelect"></select>
+    </label>
+    
+    <div class="control-buttons">
+      <button id="clipBtn"><i class="fas fa-cut"></i> Clip All Files</button>
+    </div>
+    
+    <div class="status-message" id="clip-status" style="display: none;"></div>
+    
+    <p style="font-size: 0.8em; color: #7f8c8d; margin-top: 15px;">
+      <i class="fas fa-info-circle"></i> Draw a shape on the map to define the clip area
+    </p>
+  </div>
+  
+  <!-- Classification Tool Tab -->
+  <div id="classification-tool-content" class="tool-content" style="display: none;">
+    <label>Band Folder:
+      <select id="classFolderSelect"></select>
+    </label>
+    
+    <label>Training Data:
+      <select id="trainingDataSelect"></select>
+    </label>
+    
+    <div class="control-buttons">
+      <button id="newTrainingBtn" class="secondary"><i class="fas fa-plus"></i> New Training</button>
+      <button id="runClassificationBtn"><i class="fas fa-play"></i> Run Classification</button>
+    </div>
+    
+    <div id="training-controls" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+      <label>Select Class:
+         <select id="classTypeSelect" class="form-control">
+            <option value="0">Urban</option>
+            <option value="1">Vegetation</option>
+            <option value="2">Water</option>
+            </select>
+              </label>
+      
+      <div class="control-buttons">
+        <button id="saveTrainingBtn"><i class="fas fa-save"></i> Save</button>
+        <button id="cancelTrainingBtn" class="secondary"><i class="fas fa-times"></i> Cancel</button>
+      </div>
+      
+      <p style="font-size: 0.8em; color: #7f8c8d; margin-top: 10px;">
+        <i class="fas fa-info-circle"></i> Click on the map to add training points
+      </p>
+    </div>
+    
+    <div class="status-message" id="classification-status" style="display: none;"></div>
+  </div>
+</div>
+
+<!-- Tool Toggle Button -->
+<div id="tool-toggle" style="position: absolute; top: 8pc; right: 1pc; z-index: 1000;">
+  <button onclick="toggleToolbox()" style="background: #3498db; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 1.5em; box-shadow: 0 2px 10px rgba(0,0,0,0.2); cursor: pointer;">
+    <i class="fas fa-tools"></i>
+  </button>
+</div>
+
+<script>
+  // Initialize map with multiple base layers
+  const map = L.map('map').setView([0, 0], 2);
+  
+  const baseLayers = {
+    "OpenStreetMap": L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }),
+    "Satellite": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles © Esri'
+    })
+  };
+  
+  baseLayers["OpenStreetMap"].addTo(map);
+  
+  // Add layer control
+  L.control.layers(baseLayers, null, {position: 'topright'}).addTo(map);
+  
+  // Add opacity control
+  const opacityControl = L.control({position: 'topright'});
+  opacityControl.onAdd = function(map) {
+    const div = L.DomUtil.create('div', 'leaflet-control-opacity');
+    div.innerHTML = `
+      <label>Layer Opacity</label>
+      <input type="range" id="opacitySlider" min="0" max="1" step="0.05" value="1">
+    `;
+    return div;
+  };
+  opacityControl.addTo(map);
+  
+  // Shared variables
+  let rasterLayer = null;
+  let drawnLayer = null;
+  let trainingPoints = [];
+  let trainingMarkers = [];
+  const drawnItems = new L.FeatureGroup().addTo(map);
+  
+  // Initialize draw controls
+  const drawControl = new L.Control.Draw({
+    draw: {
+      polyline: false,
+      polygon: false,
+      marker: false,
+      circle: false,
+      rectangle: true,
+    },
+    edit: {
+      featureGroup: drawnItems,
+    },
+  });
+  map.addControl(drawControl);
+
+  // Map events
+  map.on(L.Draw.Event.CREATED, function(e) {
+    if (drawnLayer) drawnItems.removeLayer(drawnLayer);
+    drawnLayer = e.layer;
+    drawnItems.addLayer(drawnLayer);
+  });
+
+  // Toolbox toggle
+  function toggleToolbox() {
+    const toolbox = document.getElementById('main-toolbox');
+    if (toolbox.style.display === 'none') {
+      toolbox.style.display = 'block';
+      loadFolders();
+      loadTrainingData();
+    } else {
+      toolbox.style.display = 'none';
+    }
+  }
+
+  // Tab switching
+  document.querySelectorAll('.tool-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      // Update active tab
+      document.querySelectorAll('.tool-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Show corresponding content
+      document.querySelectorAll('.tool-content').forEach(c => c.style.display = 'none');
+      document.getElementById(`${this.dataset.tool}-tool-content`).style.display = 'block';
+    });
+  });
+
+  // Close toolbox
+  document.getElementById('close-main-toolbox').addEventListener('click', toggleToolbox);
+
+  // Raster Clip Tool Functions
+  async function loadFolders() {
+    try {
+      const res = await fetch('/folders');
+      const folders = await res.json();
+      
+      const folderSelect = document.getElementById('folderSelect');
+      const classFolderSelect = document.getElementById('classFolderSelect');
+      
+      folderSelect.innerHTML = folders.map(f => `<option value="${f}">${f}</option>`).join('');
+      classFolderSelect.innerHTML = folders.map(f => `<option value="${f}">${f}</option>`).join('');
+      
+      if (folders.length) {
+        folderSelect.dispatchEvent(new Event('change'));
+        classFolderSelect.dispatchEvent(new Event('change'));
+      }
+    } catch (err) {
+      showStatus('clip-status', `Error loading folders: ${err.message}`, 'error');
+    }
+  }
+
+  document.getElementById('folderSelect').addEventListener('change', async function() {
+    const folder = this.value;
+    try {
+      const res = await fetch(`/files/${folder}`);
+      const files = await res.json();
+      
+      const fileSelect = document.getElementById('fileSelect');
+      fileSelect.innerHTML = files.map(f => `<option value="${f}">${f}</option>`).join('');
+      
+      if (files.length) {
+        fileSelect.dispatchEvent(new Event('change'));
+      }
+    } catch (err) {
+      showStatus('clip-status', `Error loading files: ${err.message}`, 'error');
+    }
+  });
+
+  document.getElementById('fileSelect').addEventListener('change', async function() {
+    const folder = document.getElementById('folderSelect').value;
+    const file = this.value;
+    
+    if (!folder || !file) return;
+
+    const url = `/raster/${folder}/${file}`;
+
+    try {
+      const arrayBuffer = await fetch(url).then(res => {
+        if (!res.ok) throw new Error("Failed to fetch raster file");
+        return res.arrayBuffer();
+      });
+      
+      const georaster = await parseGeoraster(arrayBuffer);
+
+      if (rasterLayer) map.removeLayer(rasterLayer);
+
+      rasterLayer = new GeoRasterLayer({
+        georaster,
+        opacity: parseFloat(document.getElementById('opacitySlider').value),
+        resolution: 64,
+      });
+
+      rasterLayer.addTo(map);
+      map.fitBounds(rasterLayer.getBounds());
+      showStatus('clip-status', `Loaded: ${file}`, 'success');
+    } catch (err) {
+      showStatus('clip-status', `Error loading raster: ${err.message}`, 'error');
+    }
+  });
+
+  // Opacity control
+  document.getElementById('opacitySlider').addEventListener('input', function() {
+    if (rasterLayer) {
+      rasterLayer.setOpacity(parseFloat(this.value));
+    }
+  });
+
+  // Clip button
+  document.getElementById('clipBtn').addEventListener('click', async function() {
+    if (!drawnLayer) {
+      showStatus('clip-status', 'Please draw a shape on the map first', 'error');
+      return;
+    }
+
+    const folder = document.getElementById('folderSelect').value;
+    const geometry = drawnLayer.toGeoJSON().geometry;
+
+    try {
+      showStatus('clip-status', 'Clipping in progress...', 'success');
+      
+      const response = await fetch('/clip', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ folder, geometry }),
+      });
+
+      const contentType = response.headers.get("Content-Type");
+
+      if (contentType && contentType.includes("application/json")) {
+        const result = await response.json();
+        if (response.ok) {
+          showStatus('clip-status', `Clipped files saved: ${result.clipped.join(', ')}`, 'success');
+        } else {
+          showStatus('clip-status', `Error: ${result.error}`, 'error');
+        }
+      } else {
+        const text = await response.text();
+        console.error("Non-JSON response:", text);
+        showStatus('clip-status', 'Clipping failed: Server returned unexpected response', 'error');
+      }
+    } catch (err) {
+      showStatus('clip-status', `Clipping failed: ${err.message}`, 'error');
+    }
+  });
+
+  async function loadTrainingData() {
+  try {
+    const res = await fetch('/training-data');
+    const datasets = await res.json();
+
+    const trainingSelect = document.getElementById('trainingDataSelect');
+    trainingSelect.innerHTML = ''; // Clear existing options
+
+    datasets.forEach(d => {
+      const option = document.createElement('option');
+      option.value = d;
+      option.textContent = d;
+      trainingSelect.appendChild(option);
+    });
+    
+    showStatus('classification-status', 'Training data loaded successfully', 'success');
+
+  } catch (err) {
+    showStatus('classification-status', `Error loading training data: ${err.message}`, 'error');
+  }
+}
+
+  // Training mode
+  document.getElementById('newTrainingBtn').addEventListener('click', function() {
+    document.getElementById('training-controls').style.display = 'block';
+    trainingPoints = [];
+    clearTrainingMarkers();
+    map.off('click', addTrainingPoint);
+    map.on('click', addTrainingPoint);
+    showStatus('classification-status', 'Click on the map to add training points', 'success');
+  });
+
+  document.getElementById('cancelTrainingBtn').addEventListener('click', function() {
+    document.getElementById('training-controls').style.display = 'none';
+    trainingPoints = [];
+    clearTrainingMarkers();
+    map.off('click', addTrainingPoint);
+    showStatus('classification-status', 'Training cancelled', 'success');
+  });
+
+  // Add training point
+// Define your class mapping with all metadata
+const classInfo = {
+    0: { name: 'urban', color: 'red', value: 0 },
+    1: { name: 'vegetation', color: 'green', value: 1 },
+    2: { name: 'water', color: 'blue', value: 2 }
+};
+
+  function addTrainingPoint(e) {
+    const classType = document.getElementById('classTypeSelect').value;
+     // Class metadata mapping
+    const selectedClass = classInfo[classType] || { 
+        name: 'Unknown', 
+        color: 'gray', 
+        value: -1 
+    };
+
+    
+    const classColors = {
+      urban: 'red',
+      vegetation: 'green',
+      water: 'blue'
+    };
+
+    const point = {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [e.latlng.lng, e.latlng.lat]
+      },
+      properties: {
+            class_value: selectedClass.value,  // Integer for ML
+            class_name: selectedClass.name,    // Human-readable
+            color: selectedClass.color,       // Visualization
+            // Additional metadata
+            timestamp: new Date().toISOString(),
+            source: 'manual'
+      }
+    };
+
+    trainingPoints.push(point);
+
+    const marker = L.circleMarker(e.latlng, {
+      radius: 8,
+      fillColor: classColors[classType],
+      color: selectedClass.color,
+      weight: 1.5,
+      fillOpacity: 0.8,
+      className: 'training-marker'
+    }).addTo(map);
+
+    trainingMarkers.push(marker);
+    showStatus('classification-status', `Added ${classType} point (${trainingPoints.length} total)`, 'success');
+  }
+
+  // Clear training markers
+  function clearTrainingMarkers() {
+    trainingMarkers.forEach(marker => map.removeLayer(marker));
+    trainingMarkers = [];
+  }
+
+  // Save training data
+  document.getElementById('saveTrainingBtn').addEventListener('click', async function() {
+    if (trainingPoints.length === 0) {
+      showStatus('classification-status', 'Please add some training points first', 'error');
+      return;
+    }
+
+    const name = prompt("Enter a name for this training dataset:");
+    if (!name) return;
+
+    try {
+      showStatus('classification-status', 'Saving training data...', 'success');
+      
+      const response = await fetch('/save_training_points', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name,
+          points: trainingPoints,
+          folder: document.getElementById('classFolderSelect').value
+        })
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        showStatus('classification-status', 'Training data saved successfully!', 'success');
+        document.getElementById('training-controls').style.display = 'none';
+        trainingPoints = [];
+        clearTrainingMarkers();
+        map.off('click', addTrainingPoint);
+        loadTrainingData();
+      } else {
+        showStatus('classification-status', `Error: ${result.error}`, 'error');
+      }
+    } catch (err) {
+      showStatus('classification-status', `Failed to save training data: ${err.message}`, 'error');
+    }
+  });
+
+  // Run classification
+  document.getElementById('runClassificationBtn').addEventListener('click', async function() {
+    const folder = document.getElementById('classFolderSelect').value;
+    const trainingData = document.getElementById('trainingDataSelect').value;
+
+    if (!folder || !trainingData) {
+      showStatus('classification-status', 'Please select both a band folder and training data', 'error');
+      return;
+    }
+
+    try {
+      showStatus('classification-status', 'Running classification...', 'success');
+      
+      const response = await fetch('/classify', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          folder: folder,
+          training: trainingData
+        })
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        showStatus('classification-status', `Classification completed! Results: ${result.output}`, 'success');
+      } else {
+        showStatus('classification-status', `Error: ${result.error}`, 'error');
+      }
+    } catch (err) {
+      showStatus('classification-status', `Classification failed: ${err.message}`, 'error');
+    }
+  });
+
+  // Helper function to show status messages
+  function showStatus(elementId, message, type) {
+    const element = document.getElementById(elementId);
+    element.textContent = message;
+    element.className = `status-message status-${type}`;
+    element.style.display = 'block';
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+      element.style.display = 'none';
+    }, 5000);
+  }
+
+  // Initialize on load
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add toggle button for mobile
+    if (window.innerWidth < 768) {
+      document.getElementById('tool-toggle').style.top = '60px';
+    }
+  });
+</script>
+</body>
+</html>
